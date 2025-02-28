@@ -48,22 +48,13 @@ class ControllerZfsLocalDriver extends ControllerZfsBaseDriver {
       options.executor = execClient;
       options.idempotent = true;
 
-      /*
-      if (
-        this.options.zfs.hasOwnProperty("cli") &&
-        this.options.zfs.cli &&
-        this.options.zfs.cli.hasOwnProperty("paths")
-      ) {
-        options.paths = this.options.zfs.cli.paths;
-      }
-      */
-
       // use env based paths to allow for custom wrapper scripts to chroot to the host
       options.paths = {
         zfs: "zfs",
         zpool: "zpool",
         sudo: "sudo",
         chroot: "chroot",
+        ..._.get(this.options, "zfs.cli.paths", {}),
       };
 
       options.sudo = _.get(this.options, "zfs.cli.sudoEnabled", false);
